@@ -5,12 +5,12 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-import usersRouter from "#api/users.js";
-import workoutsRouter from "#api/workouts/index.js";
-import goalsRouter from "#api/goals/index.js";
+import usersRouter from "#api/users";
+import workoutsRouter from "#api/workouts";
+import goalsRouter from "#api/goals";
 
-import getUserFromToken from "#middleware/getUserFromToken.js";
-import handlePostgresErrors from "#middleware/handlePostgresErrors.js";
+import getUserFromToken from "#middleware/getUserFromToken";
+import handlePostgresErrors from "#middleware/handlePostgresErrors";
 
 const app = express();
 

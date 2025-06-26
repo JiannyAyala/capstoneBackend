@@ -15,19 +15,19 @@
   },
   "scripts": {
     "start": "node --env-file=.env server.js",
-    "dev": "node --watch --env-file=.env server.js",
+    "dev": "node --watch server.js",
     "test": "vitest",
     "db:schema": "psql -d quicktask -f db/schema.sql",
     "db:seed": "node --env-file=.env db/seed.js",
     "db:reset": "npm run db:schema && npm run db:seed"
   },
   "_moduleAliases": {
-  "#app": "./app.js",
-  "#db": "./db",
-  "#api": "./api",
-  "#middleware": "./middleware",
-  "#utils": "./utils"
-},
+    "#app": "./app.js",
+    "#db": "./db",
+    "#api": "./api",
+    "#middleware": "./middleware",
+    "#utils": "./utils"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
