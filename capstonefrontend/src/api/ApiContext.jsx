@@ -1,41 +1,45 @@
-/**
- * ApiContext attaches the user's authentication token to API requests when possible.
- * It also handles tags to refresh appropriate queries after a mutation.
- */
-
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 
-export const API = import.meta.env.VITE_API_URL;
+// ✅ Set correct base path that matches your Express routes
+export const API = "http://localhost:3000";
 
 const ApiContext = createContext();
 
 export function ApiProvider({ children }) {
   const { token } = useAuth();
-  const headers = { "Content-Type": "application/json" };
-  if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const request = async (resource, options) => {
-    const response = await fetch(API + resource, {
+  const request = async (resource, options = {}) => {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+    const url = API + (resource.startsWith("/") ? resource : `/${resource}`);
+    const response = await fetch(url, {
       headers,
       ...options,
     });
-    const isJson = /json/.test(response.headers.get("Content-Type"));
+
+    const isJson = /json/.test(response.headers.get("Content-Type") || "");
     const result = isJson ? await response.json() : await response.text();
+
     if (!response.ok) throw Error(result);
     return result;
   };
 
-  const [tags, setTags] = useState([]);
+  // Optional tag system
+  const [tags, setTags] = useState({});
   const provideTag = (tag, query) => {
-    setTags({ ...tags, [tag]: query });
+    setTags((prev) => ({ ...prev, [tag]: query }));
   };
   const invalidateTags = (tagsToInvalidate) => {
     tagsToInvalidate.forEach((tag) => tags[tag]?.());
   };
 
-  const value = { request, provideTag, invalidateTags };
-  return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
+  return (
+    <ApiContext.Provider value={{ request, provideTag, invalidateTags }}>
+      {children}
+    </ApiContext.Provider>
+  );
 }
 
 export function useApi() {

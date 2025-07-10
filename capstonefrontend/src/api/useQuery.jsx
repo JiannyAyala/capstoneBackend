@@ -1,33 +1,28 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "./ApiContext";
 
-/** Queries the API and returns the data, loading status, and error message. */
 export function useQuery(resource, tag) {
   const { request, provideTag } = useApi();
-
-  const [data, setData] = useState();
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const query = async () => {
-    setLoading(true);
-    setError(null);
-
+  async function fetchData() {
     try {
+      setLoading(true);
       const result = await request(resource);
       setData(result);
-    } catch (e) {
-      console.error(e);
-      setError(e.message);
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
-    provideTag(tag, query);
-    query();
-  }, []);
+    fetchData();
+    if (tag) provideTag(tag, fetchData);
+  }, [resource]);
 
   return { data, loading, error };
 }

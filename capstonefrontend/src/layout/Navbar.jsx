@@ -3,6 +3,7 @@ import { useAuth } from "../auth/AuthContext";
 
 export default function Navbar() {
   const { token, logout } = useAuth();
+  console.log("TOKEN VALUE:", token);
 
   return (
     <header id="navbar">

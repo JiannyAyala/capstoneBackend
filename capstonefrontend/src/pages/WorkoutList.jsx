@@ -1,7 +1,12 @@
 import { useQuery } from "../api/useQuery";
 
 export default function WorkoutList() {
-  const { data: workouts, loading, error } = useQuery("/workouts");
+  // ✅ Corrected endpoint
+  const {
+    data: workouts,
+    loading,
+    error,
+  } = useQuery("/api/workouts", "workouts");
 
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error loading workouts</p>;

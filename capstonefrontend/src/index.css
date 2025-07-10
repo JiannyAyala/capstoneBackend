@@ -84,3 +84,7 @@ ul li {
   border: 1px solid #ddd;
   border-radius: 6px;
 }
+#navbar {
+  background: lightgray;
+  padding: 1rem;
+}

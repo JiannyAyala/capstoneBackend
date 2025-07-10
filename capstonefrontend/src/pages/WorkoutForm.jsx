@@ -6,7 +6,10 @@ export default function WorkoutForm() {
   const [intensity, setIntensity] = useState("");
   const [duration, setDuration] = useState("");
 
-  const { mutate, isLoading, error } = useMutation("/workouts");
+  // ✅ Corrected endpoint and added tag
+  const { mutate, isLoading, error } = useMutation("/api/workouts", [
+    "workouts",
+  ]);
 
   function handleSubmit(e) {
     e.preventDefault();

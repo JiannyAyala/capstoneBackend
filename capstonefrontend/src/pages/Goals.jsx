@@ -6,8 +6,9 @@ export default function Goals() {
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
 
-  const { data: goals, loading } = useQuery("/goals");
-  const { mutate } = useMutation("/goals");
+  // ✅ Corrected endpoint and added tag
+  const { data: goals, loading } = useQuery("/api/goals", "goals");
+  const { mutate } = useMutation("/api/goals", ["goals"]);
 
   function handleSubmit(e) {
     e.preventDefault();

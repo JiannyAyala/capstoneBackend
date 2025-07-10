@@ -1,38 +1,25 @@
 import { useState } from "react";
 import { useApi } from "./ApiContext";
 
-/**
- * Returns a function to mutate a resource, as well as some state
- * that tracks the response of that mutation request.
- */
-export function useMutation(method, resource, tagsToInvalidate) {
+export function useMutation(resource, tagsToInvalidate = []) {
   const { request, invalidateTags } = useApi();
-
-  const [data, setData] = useState();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const mutate = async (body) => {
-    setLoading(true);
-    setError(null);
-
+  async function mutate(body) {
     try {
-      const result = await request(resource, {
-        method,
+      setIsLoading(true);
+      await request(resource, {
+        method: "POST",
         body: JSON.stringify(body),
       });
-      setData(result);
       invalidateTags(tagsToInvalidate);
-      return true;
-    } catch (e) {
-      console.error(e);
-      setError(e.message);
+    } catch (err) {
+      setError(err);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
+  }
 
-    return false;
-  };
-
-  return { mutate, data, loading, error };
+  return { mutate, isLoading, error };
 }

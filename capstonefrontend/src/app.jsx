@@ -14,16 +14,17 @@ export default function App() {
   return (
     <AuthProvider>
       <ApiProvider>
-        <Layout>
-          <Routes>
+        <Routes>
+          <Route element={<Layout />}>
             <Route path="/" element={<h1>Welcome to QuickTask Fit</h1>} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/workouts" element={<WorkoutList />} />
             <Route path="/workouts/new" element={<WorkoutForm />} />
             <Route path="/goals" element={<Goals />} />
-          </Routes>
-        </Layout>
+            <Route path="*" element={<h1>404 Not Found</h1>} />
+          </Route>
+        </Routes>
       </ApiProvider>
     </AuthProvider>
   );
